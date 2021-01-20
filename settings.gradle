@@ -1,0 +1,3 @@
+include ':branchgrowview'
+include ':app'
+rootProject.name = "LinkedBranchGrowView"
