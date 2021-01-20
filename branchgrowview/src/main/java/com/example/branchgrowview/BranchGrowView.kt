@@ -37,14 +37,14 @@ fun Canvas.drawBranchGrow(scale : Float, w : Float, h : Float, paint : Paint) {
     val sc1 : Float = scale.divideScale(0, parts)
     val sc2 : Float = scale.divideScale(1, parts)
     val sc3 : Float = scale.divideScale(2, parts)
-    val gap : Float = w / ( + 2)
+    val gap : Float = w / (lines + 2)
     save()
     translate(0f, 0f)
     drawLine(w * sc3, h / 10, w * sc1, h / 10, paint)
     for (j in 0..(lines - 1)) {
         save()
-        translate(gap / 2 + gap * j, h / 10)
-        drawLine(0f, 0f, 0f, size * sc3.sinify().divideScale(j, lines), paint)
+        translate(gap + gap * j, h / 10)
+        drawLine(0f, 0f, 0f, size * sc2.divideScale(j, lines).sinify(), paint)
         restore()
     }
     restore()
