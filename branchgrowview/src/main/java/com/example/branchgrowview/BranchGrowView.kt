@@ -186,4 +186,27 @@ class BranchGrowView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : BranchGrowView) {
+
+        private val animator : Animator = Animator(view)
+        private val bg : BranchGrow = BranchGrow(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            bg.draw(canvas, paint)
+            animator.animate {
+                bg.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            bg.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
