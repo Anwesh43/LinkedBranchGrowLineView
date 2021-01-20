@@ -25,8 +25,36 @@ val sizeFactor : Float = 2.9f
 val lFactor : Float = 8.1f
 val backColor : Int = Color.parseColor("#BDBDBD")
 val delay : Long = 20
+val lines : Int = 5
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawBranchGrow(scale : Float, w : Float, h : Float, paint : Paint) {
+    val size : Float = Math.min(w, h) / sizeFactor
+    val sc1 : Float = scale.divideScale(0, parts)
+    val sc2 : Float = scale.divideScale(1, parts)
+    val sc3 : Float = scale.divideScale(2, parts)
+    val gap : Float = w / ( + 2)
+    save()
+    translate(0f, 0f)
+    drawLine(w * sc3, h / 10, w * sc1, h / 10, paint)
+    for (j in 0..(lines - 1)) {
+        save()
+        translate(gap / 2 + gap * j, h / 10)
+        drawLine(0f, 0f, 0f, size * sc3.sinify().divideScale(j, lines), paint)
+        restore()
+    }
+    restore()
+}
+
+fun Canvas.drawBGNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = colors[i]
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    drawBranchGrow(scale, w, h, paint)
+}
